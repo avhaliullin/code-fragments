@@ -21,6 +21,12 @@ func (a *app) GetConfig() *config.Config { return a.conf }
 
 func (a *app) GetContext() context.Context { return a.ctx }
 
+// И добавляем getter-методы, чтобы компоненты, зависящие от БД,
+// могли ссылаться на базу данных через свой интерфейс Deps
+func (a *app) GetRepository() db.Repository { return a.repository }
+
+func (a *app) GetTxManager() db.TxManager { return a.txMgr }
+
 // initApp инициализирует наше приложение - читает конфигурацию и
 // инициализирует все компоненты - для примера проинициализируем
 // компоненты базы данных
@@ -61,9 +67,9 @@ func Handler(ctx context.Context, req map[string]string) (interface{}, error) {
 
 	// для примера просто вернем информацию о пользователе из БД
 	var user *model.User
-	err = appInstance.txMgr.InTx(ctx).Do(func(ctx context.Context) error {
+	err = appInstance.GetTxManager().InTx(ctx).Do(func(ctx context.Context) error {
 		var err error
-		user, err = appInstance.repository.GetUser(ctx, model.UserID(req["user"]))
+		user, err = appInstance.GetRepository().GetUser(ctx, model.UserID(req["user"]))
 		return err
 	})
 	return user, err
