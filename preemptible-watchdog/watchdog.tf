@@ -1,10 +1,10 @@
 locals {
   folder-id                = var.folder-id
-  maintenance-interval-utc = "03:00-05:00"
-  restart-label            = "auto-restart"
-  hours-to-restart         = 23
+  maintenance-interval-utc = "03:00-05:00" # time interval for shutting down instances in hh:mm-hh:mm format
+  restart-label            = "auto-restart" # label name, that would be used to filter managed instances. Instance must have non-empty value for specified label
+  hours-to-restart         = 23 # instance would be restarted during maintenance interval if it was last restarted more than hours-to-restart ago
   log-level                = "info"
-  operations-limit         = 10
+  operations-limit         = 10 # should be less than compute operations quota, so that watchdog won't block other compute operations in cloud
 }
 
 resource "yandex_function_trigger" "vm-watchdog" {
