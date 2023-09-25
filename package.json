@@ -1,0 +1,9 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "ydb-sdk": "^4.6.0",
+    "@yandex-cloud/nodejs-sdk": "^2.4.4"
+  }
+}
