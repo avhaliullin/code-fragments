@@ -1,0 +1,28 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+paths:
+  /ws:
+    x-yc-apigateway-websocket-connect:
+      x-yc-apigateway-integration:
+        type: cloud_functions
+        function_id: d4ejv3cp0ccatencmoo2
+        tag: "$latest"
+    x-yc-apigateway-websocket-disconnect:
+      x-yc-apigateway-integration:
+        type: cloud_functions
+        function_id: d4ejv3cp0ccatencmoo2
+        tag: "$latest"
+  /site/{file}:
+    get:
+      parameters:
+        - name: file
+          in: path
+          required: true
+          schema:
+            type: string
+      x-yc-apigateway-integration:
+        type: object_storage
+        bucket: b1g3csvleql9vhgvp36j-site-static
+        object: '{file}'
